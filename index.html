@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Knowledge Training Academy | Digital Marketing Mastery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,900;1,900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FDFCFB; color: #2D2D2D; scroll-behavior: smooth; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .bg-orange-brand { background-color: #FF6B35; }
+        .text-orange-brand { color: #FF6B35; }
+        .sidebar-item:hover { background-color: rgba(255, 107, 53, 0.1); color: #FF6B35; }
+        .active-week { background-color: #FF6B35 !important; color: white !important; }
+    </script>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script>
+        // --- BASE DE DONNÉES LOCALE DES 12 SEMAINES ---
+        const CURRICULUM_DATA = {
+            fr: [
+                { id: 1, topic: "Fondamentaux et Esprit Digital", objectives: ["Différence Marketing Traditionnel vs Digital", "Les 4 piliers (Contenu, Trafic, Conversion, Rétention)", "Mindset de croissance"], lesson: "Le marketing digital n'est pas qu'une question de réseaux sociaux. C'est l'utilisation stratégique des canaux numériques pour convertir.", tools: ["Google Search", "SimilarWeb"], task: "Audit de présence digitale de 3 concurrents." },
+                { id: 2, topic: "Définition de la Cible & Offre Irrésistible", objectives: ["Créer un Avatar Client (Persona)", "Construire une offre 'No-Brainer'", "Analyse psychologique des besoins"], lesson: "Si vous parlez à tout le monde, vous ne parlez à personne. Apprenez à cibler.", tools: ["Make My Persona", "AnswerThePublic"], task: "Remplir la fiche Avatar Client." },
+                { id: 3, topic: "Copywriting & Psychologie de Vente", objectives: ["Structure AIDA", "Écrire des titres magnétiques", "L'art du Storytelling"], lesson: "Les mots vendent. Apprenez à transformer des caractéristiques en bénéfices émotionnels.", tools: ["ChatGPT", "Hemingway App"], task: "Rédaction d'une page de capture." },
+                { id: 4, topic: "Social Media Strategy", objectives: ["Choisir sa plateforme", "Calendrier éditorial", "Algorithmes"], lesson: "La régularité bat l'intensité. Créez un système de contenu durable.", tools: ["Canva", "Buffer"], task: "Créer 1 semaine de posts." },
+                { id: 5, topic: "Publicité Payante (Meta Ads)", objectives: ["Business Manager", "Ciblage d'audience", "Tests A/B"], lesson: "Le payant est un accélérateur. Apprenez à ne pas gaspiller votre budget.", tools: ["Meta Ads Manager"], task: "Lancer une campagne de test à 5$." },
+                { id: 6, topic: "Email Marketing & Automatisation", objectives: ["Lead Magnets", "Séquences de bienvenue", "Segmentation"], lesson: "L'argent est dans la liste. Automatisez votre relation client.", tools: ["Mailchimp", "Brevo"], task: "Créer une séquence de 3 emails." },
+                { id: 7, topic: "SEO & Visibilité Google", objectives: ["Mots-clés", "Optimisation On-page", "Backlinks"], lesson: "Soyez la réponse aux questions de vos clients sur Google.", tools: ["Google Trends", "Ubersuggest"], task: "Optimiser un article de blog." },
+                { id: 8, topic: "Création de Contenu Vidéo", objectives: ["Scripts de Reels/TikTok", "Montage mobile", "Hook, Value, CTA"], lesson: "La vidéo est le format roi pour créer la confiance rapidement.", tools: ["CapCut", "Teleprompter"], task: "Tourner une vidéo de 60s." },
+                { id: 9, topic: "Analyse & Data", objectives: ["Google Analytics", "Pixels de conversion", "Calcul du ROI"], lesson: "Ce qui ne se mesure pas ne s'améliore pas.", tools: ["Google Analytics", "Hotjar"], task: "Analyser le trafic de la semaine." },
+                { id: 10, topic: "Vente & Closing", objectives: ["Traitement des objections", "Appels de découverte", "Webinaires"], lesson: "Apprenez à demander la vente avec confiance.", tools: ["Calendly", "Zoom"], task: "Simuler un appel de vente." },
+                { id: 11, topic: "Fidélisation & Parrainage", objectives: ["L'expérience client", "Demander des témoignages", "Programmes ambassadeurs"], lesson: "Il coûte 7x moins cher de garder un client que d'en trouver un nouveau.", tools: ["Trustpilot", "Typeform"], task: "Mettre en place un système d'avis." },
+                { id: 12, topic: "Plan d'Action Final", objectives: ["Business Model Canvas", "Roadmap 90 jours", "Certification"], lesson: "Passez de l'apprentissage à l'exécution massive.", tools: ["Notion"], task: "Présenter son plan stratégique final." }
+            ]
+        };
+
+        const UI = {
+            fr: { title: "Académie de Formation", reg: "Inscription", name: "Nom Complet", btn: "Accéder au cours", week: "Semaine", task: "Mission pratique", tools: "Outils recommandés" }
+        };
+
+        // --- LOGIQUE DE L'APPLICATION ---
+        let state = {
+            isRegistered: localStorage.getItem('registered') === 'true',
+            currentWeek: 0,
+            lang: 'fr'
+        };
+
+        function render() {
+            const root = document.getElementById('root');
+            const t = UI[state.lang];
+
+            if (!state.isRegistered) {
+                root.innerHTML = `
+                <div class="min-h-screen flex items-center justify-center p-6 bg-orange-50/30">
+                    <div class="max-w-md w-full bg-white p-12 rounded-[3rem] shadow-2xl border border-orange-100 text-center">
+                        <div class="w-20 h-20 bg-orange-brand rounded-3xl flex items-center justify-center mx-auto mb-8 text-white shadow-lg rotate-3">
+                            <span class="text-3xl font-black italic">K</span>
+                        </div>
+                        <h2 class="text-3xl font-serif font-black italic mb-2">${t.reg}</h2>
+                        <p class="text-gray-500 mb-8 text-sm">Entrez votre nom pour débloquer le programme complet des 12 semaines.</p>
+                        <input type="text" id="userName" placeholder="${t.name}" class="w-full p-5 mb-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-orange-500 transition-all text-center font-bold">
+                        <button onclick="register()" class="w-full py-5 bg-orange-brand text-white rounded-2xl font-bold text-lg shadow-xl hover:scale-105 transition-all">
+                            ${t.btn}
+                        </button>
+                    </div>
+                </div>`;
+            } else {
+                const week = CURRICULUM_DATA[state.lang][state.currentWeek];
+                root.innerHTML = `
+                <div class="flex flex-col lg:flex-row h-screen">
+                    <aside class="w-full lg:w-80 bg-[#151515] text-white p-8 overflow-y-auto border-r border-white/5">
+                        <div class="flex items-center gap-3 mb-12">
+                            <div class="w-10 h-10 bg-orange-brand rounded-xl flex items-center justify-center font-bold italic">K</div>
+                            <span class="font-bold tracking-tight">Knowledge Academy</span>
+                        </div>
+                        <nav class="space-y-2">
+                            ${CURRICULUM_DATA[state.lang].map((w, idx) => `
+                                <button onclick="setWeek(${idx})" class="w-full text-left p-4 rounded-2xl transition-all text-sm font-medium ${state.currentWeek === idx ? 'active-week shadow-lg' : 'text-gray-400 hover:bg-white/5'}">
+                                    <span class="block text-[10px] opacity-60 uppercase mb-1">Semaine ${w.id}</span>
+                                    ${w.topic}
+                                </button>
+                            `).join('')}
+                        </nav>
+                    </aside>
+                    <main class="flex-1 overflow-y-auto bg-[#FDFCFB] p-8 lg:p-16">
+                        <div class="max-w-4xl mx-auto">
+                            <header class="mb-12">
+                                <span class="px-4 py-1 bg-orange-100 text-orange-brand rounded-full text-xs font-bold uppercase tracking-widest">${t.week} ${week.id}</span>
+                                <h1 class="text-5xl font-serif font-black italic mt-4 text-gray-900">${week.topic}</h1>
+                            </header>
+
+                            <div class="grid gap-8">
+                                <section class="bg-white border border-gray-100 rounded-[2.5rem] p-10 shadow-sm">
+                                    <h2 class="text-xl font-bold mb-6 flex items-center gap-3"><span class="w-2 h-8 bg-orange-brand rounded-full"></span>Objectifs clés</h2>
+                                    <ul class="space-y-4">
+                                        ${week.objectives.map(obj => `<li class="flex gap-4 items-start"><span class="mt-1 w-5 h-5 rounded-full bg-orange-100 text-orange-brand flex items-center justify-center text-[10px] shrink-0">✓</span> <span class="text-gray-700 leading-relaxed font-medium">${obj}</span></li>`).join('')}
+                                    </ul>
+                                </section>
+
+                                <section class="p-10 bg-[#151515] text-white rounded-[2.5rem] shadow-xl">
+                                    <h2 class="text-orange-brand font-bold uppercase text-xs tracking-widest mb-4 italic">Résumé de la leçon</h2>
+                                    <p class="text-lg leading-relaxed text-gray-300 font-light">${week.lesson}</p>
+                                </section>
+
+                                <div class="grid md:grid-cols-2 gap-8">
+                                    <section class="bg-orange-brand p-8 rounded-[2.5rem] text-white">
+                                        <h3 class="font-bold mb-4 flex items-center gap-2">🛠️ ${t.tools}</h3>
+                                        <div class="flex flex-wrap gap-2">
+                                            ${week.tools.map(tool => `<span class="bg-white/20 px-3 py-1 rounded-lg text-sm">${tool}</span>`).join('')}
+                                        </div>
+                                    </section>
+                                    <section class="bg-white border-2 border-orange-100 p-8 rounded-[2.5rem]">
+                                        <h3 class="font-bold mb-2 text-gray-900 flex items-center gap-2">🎯 ${t.task}</h3>
+                                        <p class="text-gray-600 text-sm italic">${week.task}</p>
+                                    </section>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>`;
+            }
+        }
+
+        // --- ACTIONS ---
+        window.register = () => {
+            const name = document.getElementById('userName').value;
+            if(name) { 
+                localStorage.setItem('registered', 'true');
+                state.isRegistered = true; 
+                render(); 
+            }
+        };
+
+        window.setWeek = (index) => {
+            state.currentWeek = index;
+            render();
+            document.querySelector('main').scrollTop = 0;
+        };
+
+        render();
+    </script>
+</body>
+</html>
